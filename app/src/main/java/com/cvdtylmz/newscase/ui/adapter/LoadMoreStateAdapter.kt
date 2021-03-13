@@ -1,25 +1,16 @@
 package com.cvdtylmz.newscase.ui.adapter
 
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.cvdtylmz.newscase.databinding.ItemBottomLoadStateBinding
+import com.cvdtylmz.newscase.ui.adapter.holders.LoadStateViewHolder
 import com.cvdtylmz.newscase.util.viewBinding
 
 class LoadMoreStateAdapter(
     private val retry: () -> Unit
-) : LoadStateAdapter<LoadMoreStateAdapter.LoadStateViewHolder>() {
+) : LoadStateAdapter<LoadStateViewHolder>() {
 
-
-    class LoadStateViewHolder(val binding: ItemBottomLoadStateBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun bind(loadState: LoadState) {
-            binding.btnRetry.isVisible = loadState is LoadState.Error
-            binding.progressBar.isVisible = loadState is LoadState.Loading
-        }
-    }
 
     override fun onBindViewHolder(holder: LoadStateViewHolder, loadState: LoadState) {
         holder.bind(loadState)

@@ -30,9 +30,6 @@ class NewsFragment : BaseFragment<SharedNewsViewModel>(R.layout.fragment_news) {
     override val binding by viewBinding(FragmentNewsBinding::bind)
     override val viewModel: SharedNewsViewModel by activityViewModels()
 
-    override fun observeViewModel(viewModel: SharedNewsViewModel) {
-        super.observeViewModel(viewModel)
-    }
 
     private val articleAdapter = ArticleAdapter {
         viewModel.setSelectedArticle(it)
@@ -57,9 +54,15 @@ class NewsFragment : BaseFragment<SharedNewsViewModel>(R.layout.fragment_news) {
 
         })
     }
+
     override fun viewDidLoad(savedInstanceState: Bundle?) {
         super.viewDidLoad(savedInstanceState)
         setSearchView()
+        setRecyclerView()
+        setAdapterLoadState()
+    }
+
+    private fun setRecyclerView () {
         binding.rvNews.run {
             adapter = articleAdapter.withLoadStateFooter(
                 footer = LoadMoreStateAdapter {
@@ -74,7 +77,9 @@ class NewsFragment : BaseFragment<SharedNewsViewModel>(R.layout.fragment_news) {
             )
             layoutManager = LinearLayoutManager(this@NewsFragment.requireContext())
         }
+    }
 
+    private fun setAdapterLoadState() {
         articleAdapter.addLoadStateListener { loadState ->
             if (loadState.refresh is LoadState.Loading) {
                 lifecycleScope.launchWhenResumed {
@@ -98,5 +103,6 @@ class NewsFragment : BaseFragment<SharedNewsViewModel>(R.layout.fragment_news) {
 
             }
         }
+
     }
 }
