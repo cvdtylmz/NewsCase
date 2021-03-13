@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nsContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include
+                android:id="@+id/toolbarNewsDetail"
+                layout="@layout/app_toolbar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/imgNewsHeaderPhoto"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:adjustViewBounds="true"
+                android:src="@color/cardview_dark_background"
+                app:layout_constraintDimensionRatio="H,4:3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/toolbarNewsDetail" />
+
+
+            <TextView
+                android:id="@+id/txtNewsDetailTitle"
+                style="@style/newsTitle"
+                android:layout_marginBottom="16dp"
+                android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elt,sed do elusmod tempor"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imgNewsHeaderPhoto" />
+
+            <TextView
+                android:id="@+id/txtAuthorName"
+                style="@style/newsDescription"
+                android:drawablePadding="8dp"
+                android:text="Author Name"
+                app:drawableStartCompat="@drawable/ic_baseline_article_24"
+                app:layout_constraintEnd_toStartOf="@id/txtNewsDate"
+                app:layout_constraintStart_toStartOf="@id/txtNewsDetailTitle"
+                app:layout_constraintTop_toBottomOf="@id/txtNewsDetailTitle" />
+
+
+            <TextView
+                android:id="@+id/txtNewsDate"
+                style="@style/newsDescription"
+                android:drawablePadding="8dp"
+                android:text="03.03.2020"
+                app:drawableStartCompat="@drawable/ic_baseline_date_range_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/txtAuthorName"
+                app:layout_constraintTop_toBottomOf="@id/txtNewsDetailTitle" />
+
+            <TextView
+                android:id="@+id/txtNewsDetailContent"
+                style="@style/newsContent"
+                android:text="Milano senza Delaney cade con il Fenerbahce\nL’Olimpia subisce a rimbalzo la potenza di Vesely e le giocate di De Colo. Non bastano all’AX le fiammate di Punter e la grinta di Rodriguez-DatomeMilano senza Delaney cade con il Fenerbahce\nL’Olimpia subisce a rimbalzo la potenza di Vesely e le giocate di De Colo. Non bastano all’AX le fiammate di Punter e la grinta di Rodriguez-DatomeMilano senza Delaney cade con il Fenerbahce\nL’Olimpia subisce a rimbalzo la potenza di Vesely e le giocate di De Colo. Non bastano all’AX le fiammate di Punter e la grinta di Rodriguez-Datome"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtNewsDate" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnNavigateNewsSource"
+        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="16dp"
+        android:insetLeft="0dp"
+        android:insetTop="0dp"
+        android:insetRight="0dp"
+        android:insetBottom="0dp"
+        android:text="@string/navigate_news_source"
+        android:textAllCaps="false"
+        app:cornerRadius="4dp"
+
+        />
+
+
+</FrameLayout>
+
+

@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Appcent NewsApp</string>
+    <string name="news">News</string>
+    <string name="favorite_news">Favorites</string>
+    <string name="retry">Retry</string>
+    <string name="navigate_news_source">News Source</string>
+</resources>
