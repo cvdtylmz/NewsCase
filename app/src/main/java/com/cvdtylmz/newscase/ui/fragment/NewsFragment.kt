@@ -7,7 +7,7 @@ import android.widget.Toast.LENGTH_SHORT
 import android.widget.Toast.makeText
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -19,21 +19,20 @@ import com.cvdtylmz.newscase.databinding.FragmentNewsBinding
 import com.cvdtylmz.newscase.ui.adapter.ArticleAdapter
 import com.cvdtylmz.newscase.ui.adapter.LoadMoreStateAdapter
 import com.cvdtylmz.newscase.util.viewBinding
-import com.cvdtylmz.newscase.viewmodel.SharedNewsViewModel
+import com.cvdtylmz.newscase.viewmodel.SearchNewsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class NewsFragment : BaseFragment<SharedNewsViewModel>(R.layout.fragment_news) {
+class NewsFragment : BaseFragment<SearchNewsViewModel>(R.layout.fragment_news) {
 
     override val binding by viewBinding(FragmentNewsBinding::bind)
-    override val viewModel: SharedNewsViewModel by activityViewModels()
+    override val viewModel: SearchNewsViewModel by viewModels()
 
 
     private val articleAdapter = ArticleAdapter {
-        viewModel.setSelectedArticle(it!!)
-        NewsAppNavigator.navigateFragment(NewsDetailFragment())
+        NewsAppNavigator.navigateFragmentWithArticle(NewsDetailFragment(), it)
     }
 
     private fun setSearchView() {
@@ -62,7 +61,7 @@ class NewsFragment : BaseFragment<SharedNewsViewModel>(R.layout.fragment_news) {
         setAdapterLoadState()
     }
 
-    private fun setRecyclerView () {
+    private fun setRecyclerView() {
         binding.rvNews.run {
             adapter = articleAdapter.withLoadStateFooter(
                 footer = LoadMoreStateAdapter {

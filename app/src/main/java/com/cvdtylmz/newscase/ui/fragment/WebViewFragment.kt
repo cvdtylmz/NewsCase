@@ -3,19 +3,19 @@ package com.cvdtylmz.newscase.ui.fragment
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.webkit.WebViewClient
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.cvdtylmz.newscase.R
 import com.cvdtylmz.newscase.base.BaseFragment
 import com.cvdtylmz.newscase.databinding.FragmentWebviewBinding
 import com.cvdtylmz.newscase.util.viewBinding
-import com.cvdtylmz.newscase.viewmodel.SharedNewsViewModel
+import com.cvdtylmz.newscase.viewmodel.WebViewViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class WebViewFragment : BaseFragment<SharedNewsViewModel>(R.layout.fragment_webview) {
+class WebViewFragment : BaseFragment<WebViewViewModel>(R.layout.fragment_webview) {
 
     override val binding by viewBinding(FragmentWebviewBinding::bind)
-    override val viewModel: SharedNewsViewModel by activityViewModels()
+    override val viewModel: WebViewViewModel by viewModels()
 
     override fun viewDidLoad(savedInstanceState: Bundle?) {
         super.viewDidLoad(savedInstanceState)
@@ -27,7 +27,7 @@ class WebViewFragment : BaseFragment<SharedNewsViewModel>(R.layout.fragment_webv
         with(binding) {
             webView.webViewClient = WebViewClient()
             webView.apply {
-                viewModel.getSourceUrl().value?.let { loadUrl(it) }
+                arguments?.getString("Url", null)?.let { loadUrl(it) }
                 settings.domStorageEnabled = true
                 settings.javaScriptEnabled = true
             }

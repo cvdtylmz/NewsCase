@@ -2,7 +2,7 @@ package com.cvdtylmz.newscase.ui.fragment
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cvdtylmz.newscase.R
@@ -12,23 +12,23 @@ import com.cvdtylmz.newscase.data.model.response.Article
 import com.cvdtylmz.newscase.databinding.FragmentFavoriteNewsBinding
 import com.cvdtylmz.newscase.ui.adapter.FavoriteArticleAdapter
 import com.cvdtylmz.newscase.util.viewBinding
-import com.cvdtylmz.newscase.viewmodel.SharedNewsViewModel
+import com.cvdtylmz.newscase.viewmodel.FavoriteNewsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_favorite_news.*
 
 @AndroidEntryPoint
-class FavoriteNewsFragment : BaseFragment<SharedNewsViewModel>(R.layout.fragment_favorite_news) {
+class FavoriteNewsFragment : BaseFragment<FavoriteNewsViewModel>(R.layout.fragment_favorite_news) {
 
     override val binding by viewBinding(FragmentFavoriteNewsBinding::bind)
 
-    override val viewModel: SharedNewsViewModel by activityViewModels()
+    override val viewModel: FavoriteNewsViewModel by viewModels()
 
     private var list: List<Article> = listOf()
 
     private var favoriteArticleAdapter: FavoriteArticleAdapter? = null
 
 
-    override fun observeViewModel(viewModel: SharedNewsViewModel) {
+    override fun observeViewModel(viewModel: FavoriteNewsViewModel) {
         super.observeViewModel(viewModel)
         viewModel.favoriteArticles.observe(viewLifecycleOwner) {
             Log.i("Query", "observeViewModel:${list.size} ")
@@ -46,9 +46,7 @@ class FavoriteNewsFragment : BaseFragment<SharedNewsViewModel>(R.layout.fragment
 
     private fun setRecyclerView() {
         favoriteArticleAdapter = FavoriteArticleAdapter({
-            viewModel.setSelectedArticle(it)
-            Log.i("Query", "setRecyclerViewArticle:${viewModel.getSelectedArticle()}")
-            NewsAppNavigator.navigateFragment(NewsDetailFragment())
+            NewsAppNavigator.navigateFragmentWithArticle(NewsDetailFragment(), it)
         }, list)
         with(binding) {
             rvFavoriteNews.run {

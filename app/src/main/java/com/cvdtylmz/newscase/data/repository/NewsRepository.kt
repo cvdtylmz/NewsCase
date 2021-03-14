@@ -3,6 +3,7 @@ package com.cvdtylmz.newscase.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.cvdtylmz.newscase.data.apiservice.NewsApiService
 import com.cvdtylmz.newscase.data.datasource.FavoriteNewsPagingSource
 import com.cvdtylmz.newscase.data.datasource.NewsPagingDataSource
