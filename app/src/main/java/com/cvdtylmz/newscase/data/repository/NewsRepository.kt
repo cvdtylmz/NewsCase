@@ -3,12 +3,10 @@ package com.cvdtylmz.newscase.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import androidx.paging.cachedIn
 import com.cvdtylmz.newscase.data.apiservice.NewsApiService
-import com.cvdtylmz.newscase.data.datasource.FavoriteNewsPagingSource
+import com.cvdtylmz.newscase.data.datasource.FavoriteNewsDataSource
 import com.cvdtylmz.newscase.data.datasource.NewsPagingDataSource
 import com.cvdtylmz.newscase.data.model.response.Article
-import com.cvdtylmz.newscase.util.Resource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -21,7 +19,7 @@ interface NewsRepository {
 
 class NewsRepositoryImpl @Inject constructor(
     private val apiService: NewsApiService,
-    private val localDataSource: FavoriteNewsPagingSource
+    private val localDataSource: FavoriteNewsDataSource
 ) :
     NewsRepository {
 

@@ -19,7 +19,7 @@ class FavoriteArticleAdapter(
     override fun onBindViewHolder(holder: FavoriteArticleViewHolder, position: Int) {
         holder.bind(dataList[position])
         holder.itemView.setOnClickListener {
-            callback.invoke(dataList[holder.adapterPosition])
+            callback.invoke(dataList[holder.absoluteAdapterPosition])
         }
     }
 
