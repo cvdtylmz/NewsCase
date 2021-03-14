@@ -7,7 +7,9 @@ import com.cvdtylmz.newscase.R
 import com.cvdtylmz.newscase.base.BaseFragment
 import com.cvdtylmz.newscase.common.NewsAppNavigator
 import com.cvdtylmz.newscase.common.dateFormat
+import com.cvdtylmz.newscase.common.loadImage
 import com.cvdtylmz.newscase.common.loadImageUrl
+import com.cvdtylmz.newscase.data.model.response.Article
 import com.cvdtylmz.newscase.databinding.FragmentNewsDetailBinding
 import com.cvdtylmz.newscase.util.viewBinding
 import com.cvdtylmz.newscase.viewmodel.SharedNewsViewModel
@@ -19,6 +21,15 @@ class NewsDetailFragment : BaseFragment<SharedNewsViewModel>(R.layout.fragment_n
     override val binding by viewBinding(FragmentNewsDetailBinding::bind)
 
     override val viewModel: SharedNewsViewModel by activityViewModels()
+
+    private var currentArticle: Article? = null
+
+    override fun observeViewModel(viewModel: SharedNewsViewModel) {
+        super.observeViewModel(viewModel)
+        viewModel.insertedId.observe(viewLifecycleOwner) {
+            currentArticle?.id = it
+        }
+    }
 
 
     override fun viewDidLoad(savedInstanceState: Bundle?) {
@@ -35,9 +46,6 @@ class NewsDetailFragment : BaseFragment<SharedNewsViewModel>(R.layout.fragment_n
             toolbarNewsDetail.actionShare.setOnClickListener {
                 startShareIntent()
             }
-            toolbarNewsDetail.actionFav.setOnClickListener {
-                // todo --> add favorites
-            }
         }
     }
 
@@ -53,19 +61,41 @@ class NewsDetailFragment : BaseFragment<SharedNewsViewModel>(R.layout.fragment_n
         startActivity(shareIntent)
     }
 
+
     private fun getSelectedNewAndBind() {
-        val article = viewModel.getSelectedArticle()
+        currentArticle = viewModel.getSelectedArticle().value
+        binding.toolbarNewsDetail.actionFav.loadImage(
+            if (currentArticle?.favorite == false) R.drawable.ic_baseline_favorite_border_24
+            else R.drawable.ic_baseline_favorite_24
+        )
         with(binding) {
             btnNavigateNewsSource.setOnClickListener {
-                article.value?.url?.let { it1 -> viewModel.setSourceUrl(it1) }
+                currentArticle?.url?.let { it1 -> viewModel.setSourceUrl(it1) }
                 NewsAppNavigator.navigateFragment(WebViewFragment())
             }
-            imgNewsHeaderPhoto.loadImageUrl(url = article.value?.urlToImage, applyCircle = false)
-            txtAuthorName.text = article.value?.source?.name
-            txtNewsDate.text = article.value?.publishedAt?.dateFormat()
-            txtNewsDetailTitle.text = article.value?.title
-            txtNewsDetailContent.text = article.value?.content
+            imgNewsHeaderPhoto.loadImageUrl(url = currentArticle?.urlToImage, applyCircle = false)
+            txtAuthorName.text = currentArticle?.source?.name
+            txtNewsDate.text = currentArticle?.publishedAt?.dateFormat()
+            txtNewsDetailTitle.text = currentArticle?.title
+            txtNewsDetailContent.text = currentArticle?.content
 
+            favoriteChecker(currentArticle)
+        }
+    }
+
+    private fun favoriteChecker(favoriteArticle: Article?) {
+        binding.toolbarNewsDetail.actionFav.setOnClickListener {
+            favoriteArticle.let { data ->
+                data!!.favorite = !data.favorite
+                if (data.favorite) {
+                    viewModel.insertArticle(data)
+                    binding.toolbarNewsDetail.actionFav.loadImage(R.drawable.ic_baseline_favorite_24)
+
+                } else {
+                    viewModel.deleteArticle(data)
+                    binding.toolbarNewsDetail.actionFav.loadImage(R.drawable.ic_baseline_favorite_border_24)
+                }
+            }
         }
     }
 }

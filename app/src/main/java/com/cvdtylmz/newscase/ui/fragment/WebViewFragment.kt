@@ -17,10 +17,6 @@ class WebViewFragment : BaseFragment<SharedNewsViewModel>(R.layout.fragment_webv
     override val binding by viewBinding(FragmentWebviewBinding::bind)
     override val viewModel: SharedNewsViewModel by activityViewModels()
 
-    override fun observeViewModel(viewModel: SharedNewsViewModel) {
-        super.observeViewModel(viewModel)
-    }
-
     override fun viewDidLoad(savedInstanceState: Bundle?) {
         super.viewDidLoad(savedInstanceState)
         setWebView()

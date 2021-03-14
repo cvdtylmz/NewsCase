@@ -8,7 +8,7 @@ class ArticleDiffUtil : DiffUtil.ItemCallback<Article>() {
         oldItem: Article,
         newItem: Article
     ): Boolean {
-        return oldItem.publishedAt == newItem.publishedAt
+        return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(

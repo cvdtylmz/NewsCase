@@ -7,7 +7,7 @@ import com.cvdtylmz.newscase.data.model.response.Article
 import retrofit2.HttpException
 
 
-class NewsDataSource(private val apiService: NewsApiService, private val query: String) :
+class NewsPagingDataSource(private val apiService: NewsApiService, private val query: String) :
     PagingSource<Int, Article>() {
 
 

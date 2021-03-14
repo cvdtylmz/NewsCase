@@ -32,7 +32,7 @@ class NewsFragment : BaseFragment<SharedNewsViewModel>(R.layout.fragment_news) {
 
 
     private val articleAdapter = ArticleAdapter {
-        viewModel.setSelectedArticle(it)
+        viewModel.setSelectedArticle(it!!)
         NewsAppNavigator.navigateFragment(NewsDetailFragment())
     }
 

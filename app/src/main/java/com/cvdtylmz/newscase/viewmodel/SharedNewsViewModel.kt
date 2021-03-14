@@ -1,28 +1,49 @@
 package com.cvdtylmz.newscase.viewmodel
 
-import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.cvdtylmz.newscase.data.apiservice.NewsApiService
-import com.cvdtylmz.newscase.data.datasource.NewsDataSource
 import com.cvdtylmz.newscase.data.model.response.Article
+import com.cvdtylmz.newscase.data.repository.NewsRepositoryImpl
+import com.cvdtylmz.newscase.util.Resource
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class SharedNewsViewModel @ViewModelInject constructor(private val apiService: NewsApiService) :
+class SharedNewsViewModel @ViewModelInject constructor(
+    private val repository: NewsRepositoryImpl
+) :
     ViewModel() {
 
     private var currentQueryValue: String? = null
 
     private var currentSearchResult: Flow<PagingData<Article>>? = null
 
-    private val _selectedArticle = MutableLiveData<Article?>()
+    private val _selectedArticle = MutableLiveData<Article>()
     private val _selectedUrl = MutableLiveData<String?>()
+
+    val favoriteArticles = MutableLiveData<List<Article>>()
+
+    val insertedId = MutableLiveData<Long>()
+
+
+    fun getFavoriteArticles() {
+        viewModelScope.launch {
+            val response = withContext(Dispatchers.IO) {
+                repository.getFavoriteArticles()
+            }
+            response.collect { articleList ->
+                run {
+                    favoriteArticles.value = articleList
+                }
+            }
+        }
+    }
 
     fun searchArticles(queryString: String): Flow<PagingData<Article>> {
         val lastResult = currentSearchResult
@@ -30,16 +51,29 @@ class SharedNewsViewModel @ViewModelInject constructor(private val apiService: N
             return lastResult
         }
         currentQueryValue = queryString
-        val newResult: Flow<PagingData<Article>> = Pager(
-            config = PagingConfig(10, enablePlaceholders = false),
-            pagingSourceFactory = { NewsDataSource(apiService, queryString) }
-        ).flow.cachedIn(viewModelScope)
+        val newResult = repository.searchNews(queryString).cachedIn(viewModelScope)
         currentSearchResult = newResult
-        Log.i("Query", "searchArticles:$newResult.")
         return newResult
     }
 
-    fun setSelectedArticle(article: Article?) {
+
+    fun deleteArticle(article: Article) {
+        viewModelScope.launch {
+            repository.deleteArticle(article)
+        }
+    }
+
+    fun insertArticle(article: Article) {
+        viewModelScope.launch {
+            val response = withContext(Dispatchers.IO) {
+                repository.insertArticle(article)
+            }
+            insertedId.value = response
+
+        }
+    }
+
+    fun setSelectedArticle(article: Article) {
         _selectedArticle.value = article
     }
 
@@ -48,7 +82,6 @@ class SharedNewsViewModel @ViewModelInject constructor(private val apiService: N
     fun setSourceUrl(url: String) {
         _selectedUrl.value = url
     }
-
 
     fun getSourceUrl() = _selectedUrl
 
